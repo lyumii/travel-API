@@ -4,11 +4,11 @@ const clearBtn = document.getElementById("clear");
 
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
-  fetchCoords(city);
+  fetchWeather(city);
 });
 
 async function fetchWeather(city) {
-  const apiKey = "3463a3654ba01dfc7b98e056105b25bd";
+  const apiKey = process.env.WEATHERSTACK_API;
   const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
   const weatherBox = document.getElementById("weather");
 
@@ -68,12 +68,12 @@ async function fetchWeather(city) {
 }
 
 async function fetchPOIs(lat, lng) {
-  const apiKey = "YvwdgW0n6hFjxUY2587z06lDcpOnVKmC";
+  const apiKey = process.env.AMADEUS_API_KEY;
   const url = "";
 }
 
 async function fetchCoords(city) {
-  const apiKey = "c9f4cfde86a74b3f81f496ef85c52936";
+  const apiKey = process.env.COORDS_API_KEY;
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${apiKey}`;
 
   try {
