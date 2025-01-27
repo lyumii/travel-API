@@ -4,13 +4,13 @@ const clearBtn = document.getElementById("clear");
 
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
-  fetchWeather(city);
+  fetchCoords(city);
 });
 
 async function fetchWeather(city) {
   const apiKey = "3463a3654ba01dfc7b98e056105b25bd";
   const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
-  const weatherBox = document.getElementById("weather-box");
+  const weatherBox = document.getElementById("weather");
 
   weatherBox.innerHTML = "";
 
@@ -26,6 +26,8 @@ async function fetchWeather(city) {
       const weatherIcon = data.current.weather_icons;
       const feelsLike = data.current.feelslike;
       const humidity = data.current.humidity;
+      const wind = data.current.wind_speed;
+      const precipitation = data.current.precip;
 
       const tempParagraph = document.createElement("p");
       tempParagraph.innerText = `Temperature: ${temperature}`;
@@ -42,11 +44,19 @@ async function fetchWeather(city) {
       const humidityParagraph = document.createElement("p");
       humidityParagraph.innerText = `Humidity: ${humidity}`;
 
+      const windParagraph = document.createElement("p");
+      windParagraph.innerText = `Wind Speed: ${wind}`;
+
+      const precipParagraph = document.createElement("p");
+      precipParagraph.innerText = `Precipitation: ${precipitation}`;
+
       weatherBox.appendChild(tempParagraph);
       weatherBox.appendChild(weatherDescParagraph);
       weatherBox.appendChild(weatherImg);
       weatherBox.appendChild(feelsLikeParagraph);
       weatherBox.appendChild(humidityParagraph);
+      weatherBox.appendChild(windParagraph);
+      weatherBox.appendChild(precipParagraph);
     } else {
       weatherBox.textContent = `Nope`;
     }
@@ -57,44 +67,24 @@ async function fetchWeather(city) {
   }
 }
 
-async function fetchForecast(city) {
-  const apiKey = "3463a3654ba01dfc7b98e056105b25bd";
-  const url = `https://api.weatherstack.com/forecast?access_key=${apiKey}&query=${city}&forecast_days=3`;
-  const forecastBox = document.getElementById("forecast-box");
+async function fetchPOIs(lat, lng) {
+  const apiKey = "YvwdgW0n6hFjxUY2587z06lDcpOnVKmC";
+  const url = "";
+}
 
-  forecastBox.innerHTML = "";
+async function fetchCoords(city) {
+  const apiKey = "c9f4cfde86a74b3f81f496ef85c52936";
+  const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${apiKey}`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error("Failed to fetch");
+      throw new Error("didnt fetch");
     }
     const data = await response.json();
-    if (data.forecast) {
-      const forecastData = [];
-      data.forecast.forEach((day) => {
-        forecastData.push({
-          date: day.date,
-          maxTemp: day.temperature_max,
-          minTemp: day.temperature_min,
-          percipitation: day.percipitation,
-        });
-      });
-      forecastBox.innerHTML = forecastData
-        .map((day) => {
-          return `
-        <h4>${day.date}</h4>
-        <p>From ${day.temperature_min} to ${day.temperature_max}. </p>
-        <p>Expected percipitation: ${day.percipitation}.
-        `;
-        })
-        .join(" ");
-    } else {
-      forecastBox.textContent = `Nope`;
-    }
-  } catch (err) {
-    console.log(`Error`);
-  } finally {
-    console.log("complete");
+    const { lat, lng } = data.results[0].geometry;
+    return { lat, lng };
+  } catch (error) {
+    console.log("error", error);
   }
 }
