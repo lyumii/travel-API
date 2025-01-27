@@ -1,0 +1,47 @@
+name: Weatherstack API Integration
+
+# Trigger the workflow on push or manual trigger
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # allows manual triggering
+
+jobs:
+  fetch-weather:
+    runs-on: ubuntu-latest  # You can choose other runners based on your needs
+    
+    steps:
+    # Checkout code so you can run it on the repo
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Set up Node.js (or any other environment if necessary)
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    # Install dependencies (if you have any like axios, fetch, etc.)
+    - name: Install dependencies
+      run: npm install
+
+    # Run the script that uses the Weatherstack API
+    - name: Fetch weather data from Weatherstack API
+      run: |
+        echo "Fetching weather data for city: London"
+        node -e "
+          const fetch = require('node-fetch');
+          const apiKey = process.env.WEATHERSTACK_API_KEY;  # Access secret key
+          const city = 'London';  # You can replace with dynamic input if needed
+          const url = \`http://api.weatherstack.com/current?access_key=\${apiKey}&query=\${city}\`;
+
+          fetch(url)
+            .then(res => res.json())
+            .then(data => {
+              console.log(data);  # Log the weather data to the console
+            })
+            .catch(error => console.error('Error fetching weather:', error));
+        "
+      env:
+        WEATHERSTACK_API: ${{ secrets.WEATHERSTACK_API }}  # Inject secret into the environment
