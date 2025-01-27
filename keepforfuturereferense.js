@@ -1,6 +1,6 @@
 // doesnt work on the free API plan sadly
 async function fetchForecast(city) {
-  const apiKey = process.env.WEATHERSTACK_API;
+  const apiKey = "WEATHERSTACK_API";
   const url = `https://api.weatherstack.com/forecast?access_key=${apiKey}&query=${city}&forecast_days=3`;
   const forecastBox = document.getElementById("forecast-box");
 

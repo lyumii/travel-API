@@ -8,7 +8,7 @@ searchBtn.addEventListener("click", (event) => {
 });
 
 async function fetchWeather(city) {
-  const apiKey = process.env.WEATHERSTACK_API;
+  const apiKey = "WEATHERSTACK_API";
   const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
   const weatherBox = document.getElementById("weather");
 
@@ -68,12 +68,12 @@ async function fetchWeather(city) {
 }
 
 async function fetchPOIs(lat, lng) {
-  const apiKey = process.env.AMADEUS_API_KEY;
+  const apiKey = "AMADEUS_API_KEY";
   const url = "";
 }
 
 async function fetchCoords(city) {
-  const apiKey = process.env.COORDS_API_KEY;
+  const apiKey = "COORDS_API_KEY";
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${apiKey}`;
 
   try {
