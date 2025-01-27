@@ -8,7 +8,7 @@ searchBtn.addEventListener("click", (event) => {
 });
 
 async function fetchWeather(city) {
-  const apiKey = "WEATHERSTACK_API";
+  const apiKey = "3463a3654ba01dfc7b98e056105b25bd";
   const url = `https://api.weatherstack.com/current?access_key=${apiKey}&query=${city}`;
   const weatherBox = document.getElementById("weather");
 
