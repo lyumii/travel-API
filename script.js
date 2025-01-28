@@ -68,9 +68,25 @@ async function fetchWeather(city) {
 }
 
 async function fetchSights(city) {
+  const attractionsBox = document.getElementById("attractions");
+  attractionsBox.innerHTML = "";
   try {
     const { lat, lng } = await fetchCoords(city);
     const pois = await fetchPOIs(lat, lng);
+    // const poiList = pois.features
+    //   .map((poi) => {
+    //     return `<h3>${poi.properties.name}</h3>`;
+    //   })
+    //   .join("");
+    // attractionsBox.innerHTML = poiList;
+    for (const poi of pois.features) {
+      if (poi.properties && poi.properties.name) {
+        const poiElement = document.createElement("h3");
+        poiElement.textContent = poi.properties.name;
+        attractionsBox.appendChild(poiElement);
+      }
+    }
+
     console.log(pois);
   } catch (error) {
     console.log(`error`, error);
@@ -79,15 +95,15 @@ async function fetchSights(city) {
 
 async function fetchPOIs(lat, lng) {
   const apiKey = "6adab50e4f9f4421aabb4643494054aa";
-  const url = `https://api.geoapify.com/v2/places?categories=tourism.sights&filter=circle:${lat},${lng},5000&bias=proximity:10.746239,59.905225&limit=20&apiKey=${apiKey}`;
+  const url = `https://api.geoapify.com/v2/places?categories=tourism.sights&limit=20&apiKey=${apiKey}&lat=${lat}&lon=${lng}`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
       console.log("didnt fetch");
     }
-    const data = await response.json();
-    console.log(data);
+    const data = response.json();
+    return data;
   } catch (error) {
     console.log(`error`, error);
   }
