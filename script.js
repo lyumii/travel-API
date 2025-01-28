@@ -4,7 +4,7 @@ const clearBtn = document.getElementById("clear");
 
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
-  fetchWeather(city);
+  fetchSights(city);
 });
 
 async function fetchWeather(city) {
@@ -67,13 +67,34 @@ async function fetchWeather(city) {
   }
 }
 
+async function fetchSights(city) {
+  try {
+    const { lat, lng } = await fetchCoords(city);
+    const pois = await fetchPOIs(lat, lng);
+    console.log(pois);
+  } catch (error) {
+    console.log(`error`, error);
+  }
+}
+
 async function fetchPOIs(lat, lng) {
-  const apiKey = "AMADEUS_API_KEY";
-  const url = "";
+  const apiKey = "6adab50e4f9f4421aabb4643494054aa";
+  const url = `https://api.geoapify.com/v2/places?categories=tourism.sights&filter=circle:${lat},${lng},5000&bias=proximity:10.746239,59.905225&limit=20&apiKey=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.log("didnt fetch");
+    }
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.log(`error`, error);
+  }
 }
 
 async function fetchCoords(city) {
-  const apiKey = "COORDS_API_KEY";
+  const apiKey = "c9f4cfde86a74b3f81f496ef85c52936";
   const url = `https://api.opencagedata.com/geocode/v1/json?q=${city}&key=${apiKey}`;
 
   try {
