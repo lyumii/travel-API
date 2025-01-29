@@ -9,7 +9,7 @@ const clearBtn = document.getElementById("clear");
 
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
-  fetchImages(city);
+  fetchAll(city);
 });
 
 destinationInput.addEventListener("keydown", (event) => {
