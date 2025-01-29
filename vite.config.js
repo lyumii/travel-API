@@ -1,4 +1,4 @@
 export default defineConfig({
-  base: "/your-repo-name/",
+  base: "/travel-API/",
   build: { target: "esnext" },
 });
