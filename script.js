@@ -1,4 +1,7 @@
-import { createClient } from "/pexels";
+import { createClient } from "pexels";
+const client = createClient(
+  "z4Uya3d1JQCDBHUIO06mvA5bh1YrWExKwY65AMJx1eU3dL96bSPu9d0a"
+);
 
 const destinationInput = document.getElementById("destination");
 const searchBtn = document.getElementById("search");
@@ -7,6 +10,13 @@ const clearBtn = document.getElementById("clear");
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
   fetchImages(city);
+});
+
+destinationInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    let city = destinationInput.value;
+    fetchImages(city);
+  }
 });
 
 async function fetchWeather(city) {
@@ -133,18 +143,14 @@ async function fetchCoords(city) {
 }
 
 async function fetchImages(city) {
-  const client = createClient(
-    "z4Uya3d1JQCDBHUIO06mvA5bh1YrWExKwY65AMJx1eU3dL96bSPu9d0a"
-  );
   const query = city;
   const imgBox = document.getElementById("imgs");
 
   try {
     const response = await client.photos.search({ query, per_page: 3 });
-    const data = await response.json();
-    return data
+    imgBox.innerHTML = response.photos
       .map((pic) => {
-        imgBox.innerHTML = `<img src="${pic.photos.url}>`;
+        return `<img src="${pic.src.medium}">`;
       })
       .join("");
   } catch (error) {
