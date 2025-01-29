@@ -12,7 +12,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "pexels": "^1.4.0"
+    "pexels": "^1.4.0",
+    "vite-plugin-commonjs": "^0.10.4"
   },
   "devDependencies": {
     "vite": "^4.x"
