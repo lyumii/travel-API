@@ -15,9 +15,21 @@ searchBtn.addEventListener("click", (event) => {
 destinationInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     let city = destinationInput.value;
-    fetchImages(city);
+    fetchAll(city);
   }
 });
+
+async function fetchAll(city) {
+  try {
+    const promise1 = fetchImages(city);
+    const promise2 = fetchWeather(city);
+    const promise3 = fetchSights(city);
+    const result = await Promise.all(promise1, promise2, promise3);
+    return result;
+  } catch (error) {
+    console.log(`error`, error);
+  }
+}
 
 async function fetchWeather(city) {
   const apiKey = "3463a3654ba01dfc7b98e056105b25bd";
@@ -62,6 +74,10 @@ async function fetchWeather(city) {
       const precipParagraph = document.createElement("p");
       precipParagraph.innerText = `Precipitation: ${precipitation}`;
 
+      const title = document.createElement("h2");
+      title.innerText = `The Weather in ${city} today:`;
+
+      weatherBox.appendChild(title);
       weatherBox.appendChild(tempParagraph);
       weatherBox.appendChild(weatherDescParagraph);
       weatherBox.appendChild(weatherImg);
@@ -85,6 +101,10 @@ async function fetchSights(city) {
   try {
     const { lat, lng } = await fetchCoords(city);
     const pois = await fetchPOIs(lat, lng);
+
+    const poiTitle = document.createElement("h2");
+    poiTitle.innerText = `Points of Interest in ${city}`;
+    attractionsBox.appendChild(poiTitle);
 
     for (const poi of pois.features) {
       if (poi.properties && poi.properties.formatted) {

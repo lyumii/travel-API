@@ -36,3 +36,18 @@ button {
   border: none;
   font-size: 12px;
 }
+
+#imgs {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#imgs img {
+  width: 30%;
+}
+
+h2 {
+  padding: 20px;
+  text-align: center;
+}
