@@ -1,10 +1,12 @@
+import { createClient } from "/pexels";
+
 const destinationInput = document.getElementById("destination");
 const searchBtn = document.getElementById("search");
 const clearBtn = document.getElementById("clear");
 
 searchBtn.addEventListener("click", (event) => {
   let city = destinationInput.value;
-  fetchSights(city);
+  fetchImages(city);
 });
 
 async function fetchWeather(city) {
@@ -73,16 +75,20 @@ async function fetchSights(city) {
   try {
     const { lat, lng } = await fetchCoords(city);
     const pois = await fetchPOIs(lat, lng);
-    // const poiList = pois.features
-    //   .map((poi) => {
-    //     return `<h3>${poi.properties.name}</h3>`;
-    //   })
-    //   .join("");
-    // attractionsBox.innerHTML = poiList;
+
     for (const poi of pois.features) {
-      if (poi.properties && poi.properties.name) {
-        const poiElement = document.createElement("h3");
-        poiElement.textContent = poi.properties.name;
+      if (poi.properties && poi.properties.formatted) {
+        const poiElement = document.createElement("div");
+        poiElement.innerHTML = `
+        <h3>${poi.properties.formatted}</h3>
+        <p><a href="${
+          poi.website ||
+          `https://en.wikipedia.org/wiki/${encodeURIComponent(
+            poi.properties.name
+          )}`
+        }" target="_blank">Visit website</a></p>
+        <hr>
+        `;
         attractionsBox.appendChild(poiElement);
       }
     }
@@ -95,7 +101,7 @@ async function fetchSights(city) {
 
 async function fetchPOIs(lat, lng) {
   const apiKey = "6adab50e4f9f4421aabb4643494054aa";
-  const url = `https://api.geoapify.com/v2/places?categories=tourism.sights&limit=20&apiKey=${apiKey}&lat=${lat}&lon=${lng}`;
+  const url = `https://api.geoapify.com/v2/places?categories=tourism&limit=10&apiKey=${apiKey}&lat=${lat}&lon=${lng}`;
 
   try {
     const response = await fetch(url);
@@ -123,5 +129,25 @@ async function fetchCoords(city) {
     return { lat, lng };
   } catch (error) {
     console.log("error", error);
+  }
+}
+
+async function fetchImages(city) {
+  const client = createClient(
+    "z4Uya3d1JQCDBHUIO06mvA5bh1YrWExKwY65AMJx1eU3dL96bSPu9d0a"
+  );
+  const query = city;
+  const imgBox = document.getElementById("imgs");
+
+  try {
+    const response = await client.photos.search({ query, per_page: 3 });
+    const data = await response.json();
+    return data
+      .map((pic) => {
+        imgBox.innerHTML = `<img src="${pic.photos.url}>`;
+      })
+      .join("");
+  } catch (error) {
+    console.log(`error`, error);
   }
 }
