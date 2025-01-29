@@ -6,6 +6,7 @@
 
 body {
   background-color: rgb(10, 10, 45);
+  color: #333;
 }
 
 main {
@@ -20,7 +21,9 @@ main {
 h1 {
   letter-spacing: 0.05em;
   margin-bottom: 20px;
-  border-bottom: 2px double rgb(10, 10, 45);
+  border: 2px double rgb(10, 10, 45);
+  text-transform: uppercase;
+  padding-left: 5px;
 }
 
 #inputdiv {
