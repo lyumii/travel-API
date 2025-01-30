@@ -1,5 +1,9 @@
 import { defineConfig } from "vite";
+import commonjs from "@rollup/plugin-commonjs";
+
 export default defineConfig({
-  base: "/travel-API/",
-  build: { target: "esnext" },
+  plugins: [commonjs()],
+  build: {
+    target: "esnext",
+  },
 });

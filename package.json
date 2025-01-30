@@ -17,6 +17,7 @@
     "vite-plugin-commonjs": "^0.10.4"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.2",
     "vite": "^4.x"
   }
 }
